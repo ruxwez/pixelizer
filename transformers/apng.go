@@ -9,7 +9,9 @@ import (
 	"github.com/kettek/apng"
 )
 
-func Apng(filePath string) error {
+func Apng(filePath string, pixels int) error {
+
+	nameFile := util.GetNameFromPath(filePath)
 
 	// Abrimos la imagen seleccionada por el usuario
 	inFile, err := os.Open(filePath)
@@ -28,7 +30,7 @@ func Apng(filePath string) error {
 
 	for _, frame := range a.Frames {
 		pixelatedFrame := apng.Frame{
-			Image:            renderer.Pixelate(frame.Image, 10),
+			Image:            renderer.Pixelate(frame.Image, pixels),
 			XOffset:          frame.XOffset,
 			YOffset:          frame.YOffset,
 			DelayNumerator:   frame.DelayNumerator,
@@ -40,7 +42,7 @@ func Apng(filePath string) error {
 		pixelatedFrames = append(pixelatedFrames, pixelatedFrame)
 	}
 
-	outFile, err := util.CreateFile(fmt.Sprintf("./out/%s.png", "test"))
+	outFile, err := util.CreateFile(fmt.Sprintf("./out/%s.png", nameFile))
 	if err != nil {
 		panic(err)
 	}
